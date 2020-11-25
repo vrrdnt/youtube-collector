@@ -14,8 +14,7 @@ import os
 import shutil
 from io import BytesIO
 
-# i couldn't decide what i wanted the artist for each mp3 file to be,
-# so let's just make it the user running the script
+# used to find the user's home folder. probably unnecessary
 import getpass
 
 # downloading youtube videos and converting them
