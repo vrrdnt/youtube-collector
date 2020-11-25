@@ -8,6 +8,7 @@ Below shows where to download the .zip file for this repository.
 Once downloaded, right click the file and click "**Extract All...**"  
 Change the directory to your desktop, documents folder, etc... or leave it how it is.  
 You can also move it anywhere after it's extracted.  
+You can also move the shortcut called **Collector** anywhere to easily run the program.
   
 ### Installing Python
 Click [here](https://www.python.org/ftp/python/3.9.0/python-3.9.0-amd64.exe) to download the correct python installer.  
