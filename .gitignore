@@ -23,7 +23,7 @@ Thumbs.db
 
 # IDEA folder
 /.idea
-.idea
+../.idea
 
 # Coveralls
 coverage
