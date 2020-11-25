@@ -17,7 +17,7 @@ Also make sure to add Python to your PATH. (Should be another checkbox.)
 Once finished, restart your computer.  
   
 ### Installing the required libraries  
-Open the folder of this project you downloaded and extracted, and run **setup.bat**.
+Open the folder of this project you downloaded and extracted, and run **setup.py**.
 
 #### If the program fails and you need FFMPEG  
 A detailed, easy-to-follow guide for installing FFMPEG is [here](https://www.wikihow.com/Install-FFmpeg-on-Windows).
