@@ -1,5 +1,5 @@
 # youtube-collector
-A tool for downloading YouTube/SoundCloud audio and storing it for Spotify to use.  
+A tool for downloading YouTube/SoundCloud audio and storing it for Spotify to use, using [youtube-dl](https://github.com/ytdl-org/youtube-dl) and [FFMPEG](https://ffmpeg.org/).  
 
 ## Preliminary Setup  
 In the Spotify© app for PC, click the three white dots at the top left, click **Edit**, and click **Preferences**. (You can also press **Ctrl** + **P**)  
