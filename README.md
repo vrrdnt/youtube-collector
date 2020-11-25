@@ -13,12 +13,11 @@ A detailed, easy-to-follow guide for installing FFMPEG on Windows is [here](http
 
 # Installation
 ### Downloading youtube-collector
-Below shows where to download the .zip file for this repository.  
+The image below shows where to click to download the .zip file for this repository.  
 ![](https://i.imgur.com/g6fzqGb.jpg)  
 Once downloaded, right click the file and click "**Extract All...**"  
 Change the directory to your desktop, documents folder, etc... or leave it how it is.  
 You can also move it anywhere after it's extracted.  
-You can also move the shortcut called **Collector** anywhere to easily run the program.
   
 ### Installing Python
 Click [here](https://www.python.org/ftp/python/3.9.0/python-3.9.0-amd64.exe) to download the correct python installer.  
@@ -28,3 +27,7 @@ Once finished, restart your computer.
   
 ### Installing the required libraries  
 Open the folder of this project you downloaded and extracted, and run **setup.py**.
+
+# All done!  
+You'll find the songs you downloaded in the "Local Files" tab in your Spotify app.  
+To sync your files to your phone, follow [this guide](https://support.spotify.com/us/article/listen-to-local-files/).
