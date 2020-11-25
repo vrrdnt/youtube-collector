@@ -13,6 +13,7 @@ You can also move the shortcut called **Collector** anywhere to easily run the p
 ### Installing Python
 Click [here](https://www.python.org/ftp/python/3.9.0/python-3.9.0-amd64.exe) to download the correct python installer.  
 Click install, and make sure **pip** gets installed along with Python. (There will be a checkbox).  
+Also make sure to add Python to your PATH. (Should be another checkbox.)  
 Once finished, restart your computer.  
   
 ### Installing the required libraries  
