@@ -9,7 +9,9 @@ Make sure to enable the folder by clicking the toggle button to its right, leavi
   
 #### Installing FFMPEG  
 This project requires [FFMPEG](https://ffmpeg.org/download.html). Please download the correct binary for your OS, and make it available in your environment/path.  
-A detailed, easy-to-follow guide for installing FFMPEG on Windows is [here](https://www.wikihow.com/Install-FFmpeg-on-Windows).
+A detailed, easy-to-follow guide for installing FFMPEG on Windows is [here](https://www.wikihow.com/Install-FFmpeg-on-Windows).  
+A guide for Mac OS X is [here](https://superuser.com/a/624562).  
+A guide for Linux/Ubuntu is [here](https://linuxize.com/post/how-to-install-ffmpeg-on-ubuntu-18-04/).
 
 # Installation
 ### Downloading youtube-collector
