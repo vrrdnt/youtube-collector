@@ -1,11 +1,13 @@
 # youtube-collector
 A tool for downloading YouTube/SoundCloud audio and storing it for Spotify to use, using [youtube-dl](https://github.com/ytdl-org/youtube-dl) and [FFMPEG](https://ffmpeg.org/).  
 
-## Preliminary Setup  
+## Preliminary Setup \[Semi-optional\]
 In the Spotify© app for PC, click the three white dots at the top left, click **Edit**, and click **Preferences**. (You can also press **Ctrl** + **P**)  
 Next, scroll down to the Local Files section. Click **Add a Source**, and create a folder called Spotify in your Music folder.  
 To do this, click the dropdown by your name after clicking **Add a Source**, **Right-click** the Music folder, hover over **new**, and click **Folder**. Name that folder "Spotify". Click **OK** once done.  
 Make sure to enable the folder by clicking the toggle button to its right, leaving it in the enabled/green position.  
+##### NOTE:  
+You don't have to make a folder called `Spotify`, but the program as of now was written to detect it automatically. Please modify Line 20 of `youtube-collector/lib/move_files.py` to your liking.
   
 #### Installing FFMPEG  
 This project requires [FFMPEG](https://ffmpeg.org/download.html). Please download the correct binary for your OS, and make it available in your environment/path.  
