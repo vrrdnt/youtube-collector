@@ -20,4 +20,5 @@ def move():
             dst = os.path.join("/", "Users", getpass.getuser(), "Music", "Spotify", file)
             shutil.move(src, dst)
 
+    shutil.rmtree(os.path.join("./output"))
     os.remove("thumbnail.jpg")

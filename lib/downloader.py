@@ -43,7 +43,8 @@ def download(urls):
 
         try:
             image_response = requests.get(result['thumbnails'][len(result['thumbnails']) - 1]['url'])
-        except UnboundLocalError:
+        except Exception as e:
+            print("Exception: {}".format(e))
             continue
         img = Image.open(BytesIO(image_response.content))
 
@@ -67,4 +68,5 @@ def download(urls):
                 mime_type="image/jpeg"
             )
             audio_file.tag.save()
+            os.makedirs(os.path.join('./output'), exist_ok=True)
             shutil.move(os.path.join('./working', file), os.path.join('./output', file))
