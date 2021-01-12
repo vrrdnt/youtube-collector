@@ -10,8 +10,6 @@ from PIL import Image
 import youtube_dl
 from lib.thumbnail import crop_max_square
 from lib.move_files import move
-if __name__ == '__main__':
-    from main import collect
 
 
 def download(urls):
@@ -32,14 +30,12 @@ def download(urls):
             try:
                 result = ytdl.extract_info(url, download=True)
             except youtube_dl.utils.DownloadError:
-                print()
-                collect()
+                pass
 
         try:
             image_response = requests.get(result['thumbnails'][len(result['thumbnails']) - 1]['url'])
-        except Exception as e:
-            print("Exception: {}".format(e))
-            continue
+        except UnboundLocalError:
+            break
         img = Image.open(BytesIO(image_response.content))
 
         img = crop_max_square(img).resize((500, 500), Image.LANCZOS)
