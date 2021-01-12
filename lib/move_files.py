@@ -1,12 +1,5 @@
 #!/usr/bin/env python
 
-"""
-    File name: move_files.py
-    Author: William Swoveland
-    Date created: 11/25/2020
-    Date last modified: 11/25/2020
-    Python version: 3.9.0
-"""
 
 import getpass
 import os
@@ -21,4 +14,5 @@ def move():
             shutil.move(src, dst)
 
     shutil.rmtree(os.path.join("./output"))
+    shutil.rmtree(os.path.join("./working"))
     os.remove("thumbnail.jpg")

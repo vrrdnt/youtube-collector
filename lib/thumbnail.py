@@ -1,13 +1,5 @@
 #!/usr/bin/env python
 
-"""
-    File name: thumbnail_gen.py
-    Author: William Swoveland
-    Date created: 11/25/2020
-    Date last modified: 11/25/2020
-    Python version: 3.9.0
-"""
-
 
 def crop_center(pil_img, crop_width, crop_height):
     img_width, img_height = pil_img.size

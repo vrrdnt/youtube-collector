@@ -1,12 +1,5 @@
 #!/usr/bin/env python
 
-"""
-    File name: downloader.py
-    Author: William Swoveland
-    Date created: 11/25/2020
-    Date last modified: 11/25/2020
-    Python version: 3.9.0
-"""
 
 import os
 import shutil
@@ -15,8 +8,10 @@ import eyed3
 import requests
 from PIL import Image
 import youtube_dl
-from lib.thumbnail_gen import crop_max_square
-from lib.collector import collect
+from lib.thumbnail import crop_max_square
+from lib.move_files import move
+if __name__ == '__main__':
+    from main import collect
 
 
 def download(urls):
@@ -35,8 +30,7 @@ def download(urls):
     for url in urls:
         with youtube_dl.YoutubeDL(ytdl_options) as ytdl:
             try:
-                result = ytdl.extract_info(url, download=False)
-                ytdl.download([url])
+                result = ytdl.extract_info(url, download=True)
             except youtube_dl.utils.DownloadError:
                 print()
                 collect()
@@ -70,3 +64,5 @@ def download(urls):
             audio_file.tag.save()
             os.makedirs(os.path.join('./output'), exist_ok=True)
             shutil.move(os.path.join('./working', file), os.path.join('./output', file))
+
+    return move()

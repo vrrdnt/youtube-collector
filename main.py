@@ -1,19 +1,21 @@
 #!/usr/bin/env python
 
-"""
-    File name: main.py
-    Author: William Swoveland
-    Date created: 11/24/2020
-    Date last modified: 11/25/2020
-    Python version: 3.9.0
-"""
-
-from lib.collector import collect
 from lib.downloader import download
-from lib.move_files import move
+
+
+def collect():
+    ask_again = True
+    urls = []
+    while ask_again:
+        user_input = input('Enter a YouTube or Soundcloud URL. Enter "stop" to stop collecting: ')
+
+        if user_input == "stop":
+            ask_again = False
+        else:
+            urls += [user_input]
+            ask_again = True
+    return download(urls)
 
 
 if __name__ == '__main__':
-    download(collect())
-    move()
-    print("All done!")
+    collect()
