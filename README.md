@@ -35,3 +35,8 @@ Open the folder of this project you downloaded and extracted, and run **setup.py
 # All done!  
 You'll find the songs you downloaded in the "Local Files" tab in your Spotify app.  
 To sync your files to your phone, follow [this guide](https://support.spotify.com/us/article/listen-to-local-files/).
+
+
+## TODO:
+- Integrate FFMPEG
+- Create some kind of intuitive/accessible configuration
