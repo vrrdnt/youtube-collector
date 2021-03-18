@@ -8,6 +8,7 @@ import eyed3
 import requests
 from PIL import Image
 import youtube_dl
+import ffmpy
 from lib.thumbnail import crop_max_square
 from lib.move_files import move
 
@@ -15,14 +16,7 @@ from lib.move_files import move
 def download(urls):
     ytdl_options = {
         "outtmpl": "working/%(title)s.%(ext)s",
-        "format": "bestaudio/best",
-        "postprocessors": [
-            {
-                "key": "FFmpegExtractAudio",
-                "preferredcodec": "mp3",
-                "preferredquality": "320",
-            }
-        ],
+        "format": "bestaudio/best"
     }
 
     for url in urls:
@@ -45,6 +39,15 @@ def download(urls):
         for file in os.listdir("./working"):
             if file.endswith(".mp3"):
                 files += [file]
+
+        # Convert to MP3
+        for file in files:
+            ff = ffmpy.FFmpeg(
+                inputs={str(file): None},
+                outputs={"{}.mp3".format(file[:file.find(".")]): None}
+            )
+            ff.run()
+
         for file in files:
             audio_file = eyed3.load(os.path.join('./working', file))
             audio_file.initTag()
