@@ -1,113 +1,178 @@
 const express = require('express');
-const axios = require('axios');
 const ytdl = require('ytdl-core');
-const jimp = require('jimp');
-const nodeID3 = require('node-id3');
-const sharp = require('sharp');
-const fs = require('fs')//.promises;
+const ffmpeg = require('fluent-ffmpeg');
+const Jimp = require('jimp');
+const archiver = require('archiver');
+const sanitize = require('sanitize-filename');
+const axios = require('axios');
+const fs = require('fs');
 
 const app = express();
-const port = 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+
+app.listen(3000, function () {
+    console.log('Success! App is listening at http://localhost:3000.')
+})
+
 app.post('/download', async (req, res) => {
+    const youtubeURL = await req.body.url;
+    const isPlaylist = ytdl.validateURL(youtubeURL) && ytdl.getURLVideoID(youtubeURL) === null;
+
     try {
-        const videoUrl = req.body.url;
-        const videoInfo = await ytdl.getInfo(videoUrl);
-        const videoTitle = videoInfo.videoDetails.title;
-        const videoAuthor = videoInfo.videoDetails.author.name;
+        const info = await ytdl.getInfo(youtubeURL);
 
-        await downloadVideo(videoUrl, videoTitle, videoAuthor);
+        const videoTitle = sanitize(info.videoDetails.title);
 
-        const mp3Filename = `${videoTitle}.mp3`;
-        res.download(mp3Filename, () => {
-            cleanup(videoTitle, mp3Filename);
-        });
+        if (isPlaylist) {
+            await downloadPlaylist(youtubeURL, videoTitle);
+            await convertPlaylistToMp3(videoTitle);
+            await downloadThumbnail(youtubeURL, videoTitle)
+            await addCoverArtToMp3(videoTitle);
+            await createZipFile(videoTitle);
+            res.download(`${videoTitle}.zip`, `${videoTitle}.zip`, (err) => {
+                if (err) {
+                    console.error('Error:', err);
+                    res.status(500).send('An error occurred');
+                }
+                cleanup(videoTitle);
+            });
+        } else {
+            await downloadVideo(youtubeURL, videoTitle);
+            await convertToMp3(videoTitle);
+            await downloadThumbnail(youtubeURL, videoTitle)
+            await addCoverArtToMp3(videoTitle, info.videoDetails.author.name);
+            res.download(`${videoTitle}.mp3`, `${videoTitle}.mp3`, (err) => {
+                if (err) {
+                    console.error('Error:', err);
+                    res.status(500).send('An error occurred');
+                }
+                cleanup(videoTitle);
+            });
+        }
     } catch (error) {
         console.error('Error:', error.message);
-        res.status(500).send('Error occurred while processing the download.');
+        res.status(500).send('An error occurred');
     }
 });
 
-async function downloadVideo(url, videoTitle, videoAuthor) {
-    await ytdl(url, {
-        filter: 'audioonly',
-        quality: 'highestaudio',
-        format: 'mp3',
-        o: `${videoTitle}.mp3`,
+async function downloadVideo(url, videoTitle) {
+    const videoStream = ytdl(url, { filter: 'audioandvideo' });
+    await videoStream.pipe(fs.createWriteStream(`${videoTitle}.mp4`));
+    return new Promise((resolve) => {
+        videoStream.on('end', resolve);
     });
+}
 
-    await downloadThumbnail(url, videoTitle);
-    await addCoverArtToMp3(videoTitle, videoAuthor);
+async function downloadPlaylist(url, videoTitle) {
+    const playlist = await ytdl.getPlaylist(url);
+    const videos = playlist.videos;
+
+    for (let i = 0; i < videos.length; i++) {
+        const video = videos[i];
+        const videoStream = ytdl(video.url);
+        await videoStream.pipe(fs.createWriteStream(`${videoTitle} - ${i + 1}.mp4`));
+        await new Promise((resolve) => {
+            videoStream.on('end', resolve);
+        });
+    }
+}
+
+async function convertToMp3(videoTitle) {
+    return new Promise((resolve, reject) => {
+        ffmpeg(`${videoTitle}.mp4`)
+            .noVideo()
+            .output(`${videoTitle}.mp3`)
+            .on('end', resolve)
+            .on('error', reject)
+            .run();
+    });
+}
+
+async function convertPlaylistToMp3(videoTitle) {
+    const files = fs.readdirSync('.');
+    const playlistFiles = files.filter((file) => file.startsWith(`${videoTitle} -`));
+
+    for (const file of playlistFiles) {
+        await convertToMp3(file.replace('.mp4', ''));
+    }
 }
 
 async function downloadThumbnail(url, videoTitle) {
     const info = await ytdl.getInfo(url);
+    console.log(info.videoDetails.thumbnails);
     const thumbnailUrl = info.videoDetails.thumbnails[info.videoDetails.thumbnails.length - 1].url;
 
     const response = await axios.get(thumbnailUrl, {
         responseType: 'arraybuffer',
-      });
-    
-      const buffer = Buffer.from(response.data, 'binary');
-    
-      let image = sharp(buffer);
-      const imageMetadata = await image.metadata();
-    
-      if (imageMetadata.format === 'webp') {
-        const convertedBuffer = await image.jpeg().toBuffer();
-        image = await jimp.read(convertedBuffer);
-      } else {
-        image = await jimp.read(buffer);
-      }
-    
-      await fs.writeFileSync(`${videoTitle}.jpg`, image);
-    
-      // Wait for the file to be written and close the file handle
-    //   await fs.close(await fs.open(`${videoTitle}.jpg`, 'r'));
+    });
+
+    let image = Jimp(response.data);
+  const imageMetadata = await image.metadata();
+
+  if (imageMetadata.format === 'webp') {
+    image = image.webp();
+  }
+
+  await image.toFile(`${videoTitle}.jpg`);
 }
 
-async function addCoverArtToMp3(videoTitle, videoAuthor) {
-    const thumbnailPath = `${videoTitle}.jpg`;
-    const mp3Path = `${videoTitle}.mp3`;
+async function addCoverArtToMp3(videoTitle, uploader) {
+    const files = fs.readdirSync('.');
+    const mp3Files = files.filter((file) => file.endsWith('.mp3'));
 
-    const thumbnailBuffer = await sharp(thumbnailPath)
-        .jpeg()
-        .toBuffer();
+    for (const file of mp3Files) {
+        const thumbnail = await Jimp.read(`${videoTitle}.jpg`);
+        thumbnail.cover(500, 500).write(`thumbnail.jpg`);
 
-    const tags = {
-        title: videoTitle,
-        artist: videoAuthor,
-        attachments: [
-            {
-                type: 'image/jpeg',
-                data: thumbnailBuffer,
-            },
-        ],
-    };
-
-    const mp3Buffer = fs.readFileSync(mp3Path);
-    const updatedMp3Buffer = await nodeID3.update(tags, mp3Buffer);
-
-    fs.writeFileSync(`${videoTitle}_with_cover.mp3`, updatedMp3Buffer);
-}
-
-async function cleanup(videoTitle, fileToRemove) {
-    try {
-        await fs.unlink(`${videoTitle}.mp3`);
-        await fs.unlink(`${videoTitle}.jpg`);
-        await fs.unlink(`${videoTitle}_with_cover.mp3`);
-
-        if (fileToRemove) {
-            await fs.unlink(fileToRemove);
-        }
-    } catch (error) {
-        console.error('Error occurred during cleanup:', error);
+        await new Promise((resolve, reject) => {
+            ffmpeg(file)
+                .input(`thumbnail.jpg`)
+                .outputOptions(
+                    '-map', '0',
+                    '-map', '1',
+                    '-c', 'copy',
+                    '-id3v2_version', '3',
+                    '-metadata', `title=${videoTitle}`,
+                    '-metadata', `artist=${uploader}`,
+                    '-metadata:s:v', 'title="Album cover"',
+                    '-metadata:s:v', 'comment="Cover (front)"'
+                  )
+                .output(`output_${file}`)
+                .on('end', () => {
+                    fs.renameSync(`output_${file}`, file); // Replace the original file with the one containing cover art
+                    resolve();
+                })
+                .on('error', reject)
+                .run();
+        });
     }
 }
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+
+async function createZipFile(videoTitle) {
+    const files = fs.readdirSync('.');
+    const mp3Files = files.filter((file) => file.endsWith('.mp3'));
+
+    const zip = archiver('zip');
+    const output = fs.createWriteStream(`${videoTitle}.zip`);
+
+    zip.pipe(output);
+    mp3Files.forEach((file) => {
+        zip.file(file, { name: file });
+    });
+
+    await zip.finalize();
+};
+
+function cleanup(videoTitle) {
+    fs.unlinkSync(`${videoTitle}.mp4`);
+    fs.unlinkSync(`${videoTitle}.mp3`);
+    fs.unlinkSync(`${videoTitle}.jpg`);
+    fs.unlinkSync(`thumbnail.jpg`);
+}
