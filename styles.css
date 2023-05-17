@@ -1,0 +1,48 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f1f1f1;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 1em;
+}
+
+.form {
+  margin-bottom: 1em;
+}
+
+input[type="text"] {
+  padding: 0.5em;
+  margin-right: 0.5em;
+}
+
+button {
+  padding: 0.5em 1em;
+}
+
+.status {
+  margin-top: 1em;
+  font-size: 14px;
+}
+
+#message {
+  margin-bottom: 0.5em;
+}
+
+#console {
+  font-family: monospace;
+  white-space: pre;
+  overflow-x: auto;
+  max-height: 200px;
+  padding: 0.5em;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+}
