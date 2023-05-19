@@ -7,25 +7,40 @@ body {
   font-family: Arial, sans-serif;
 }
 
-.container {
+.row {
   text-align: center;
+  display: flex;
+}
+
+.column {
+  flex: 50%;
+  padding: 0 4px;
 }
 
 h1 {
-  margin-bottom: 1em;
+  margin-bottom: 0.25em;
+}
+
+p {
+  margin-top: 0.25em
 }
 
 .form {
   margin-bottom: 1em;
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="file"] {
   padding: 0.5em;
   margin-right: 0.5em;
 }
 
 button {
   padding: 0.5em 1em;
+}
+
+:required {
+  border-color: red;
 }
 
 .status {
@@ -39,10 +54,16 @@ button {
 
 #console {
   font-family: monospace;
+  text-align: left;
   white-space: pre;
-  overflow-x: auto;
+  overflow-y: auto;
   max-height: 200px;
   padding: 0.5em;
   background-color: #ffffff;
   border: 1px solid #cccccc;
+}
+
+#console div {
+  white-space: pre-wrap;
+  word-break: break-word;
 }

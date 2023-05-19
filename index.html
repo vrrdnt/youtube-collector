@@ -3,24 +3,31 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>YouTube Downloader</title>
+  <title>YouTube Converter</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-  <div class="container">
-    <h1>YouTube Downloader</h1>
-    <div class="form">
-      <input id="urlInput" type="text" placeholder="Enter YouTube URL">
-      <input id="titleInput" type="text" placeholder="Title (Optional)">
-      <input id="artistInput" type="text" placeholder="Artist (Optional)">
-      <input id="albumInput" type="text" placeholder="Album (Optional)">
-      <input id="trackNumberInput" type="text" placeholder="Track Number (Optional)">
-      <button id="downloadButton">Download</button>
+  <div class="row">
+    <div class="column">
+      <h1>YouTube Converter</h1>
+      <p>easily convert youtube videos to mp3 files with embedded tags :-)</p>
+      <div class="form">
+        <div class="url"><input id="urlInput" type="text" placeholder="Enter YouTube URL" required></div>
+        <div><input id="titleInput" type="text" placeholder="Title (Optional)"></div>
+        <div><input id="artistInput" type="text" placeholder="Artist (Optional)"></div>
+        <div><input id="albumInput" type="text" placeholder="Album (Optional)"></div>
+        <div><input id="trackNumberInput" type="text" placeholder="Track Number (Optional)"></div>
+        <div><label for="albumArtInput">Album Art (Optional):</label></div>
+        <div><input type="file" id="albumArtInput" accept="image/*" /></div>
+        <div><button id="downloadButton">Download</button></div>
+      </div>
     </div>
-    <div class="status">
-      <div id="message"></div>
-      <div id="console"></div>
+    <div class="column">
+      <div class="status">
+        <div id="message"></div>
+        <div id="console"></div>
+      </div>
     </div>
   </div>
 

@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron');
+const path = require('path');
 
 const urlInput = document.getElementById('urlInput');
 const titleInput = document.getElementById('titleInput');
@@ -8,9 +9,21 @@ const trackNumberInput = document.getElementById('trackNumberInput');
 const downloadButton = document.getElementById('downloadButton');
 const messageElement = document.getElementById('message');
 const consoleElement = document.getElementById('console');
+const albumArtInput = document.getElementById('albumArtInput');
+
+let albumArtFilePath = '';
+
+albumArtInput.addEventListener('change', () => {
+  const file = albumArtInput.files[0];
+  albumArtFilePath = file ? file.path : '';
+  ipcRenderer.send('albumArt:change', albumArtFilePath);
+  const newLine = document.createElement('div');
+  newLine.textContent = `Album art file path: ${albumArtFilePath}`;
+  consoleElement.appendChild(newLine);
+});
 
 downloadButton.addEventListener('click', () => {
-  const url = urlInput.value;
+  const url = urlInput.value.split('&')[0]; // allow people to enter a url with a playlist index
   const title = titleInput.value;
   const artist = artistInput.value;
   const album = albumInput.value;
@@ -26,7 +39,10 @@ ipcRenderer.on('download:started', () => {
 
 ipcRenderer.on('download:completed', (event, filePath) => {
   messageElement.textContent = 'Download completed successfully!';
-  consoleElement.textContent = `File saved to: ${filePath}`;
+  const newLine = document.createElement('div');
+  newLine.textContent = `File saved to: ${filePath}`;
+  newLine.style.color = 'green';
+  consoleElement.appendChild(newLine);
 });
 
 ipcRenderer.on('download:error', (event, errorMessage, errorStack) => {
@@ -35,6 +51,11 @@ ipcRenderer.on('download:error', (event, errorMessage, errorStack) => {
 });
 
 ipcRenderer.on('console', (event, message) => {
-  consoleElement.textContent += `${message}\n`;
+  const newLine = document.createElement('div');
+  newLine.textContent = message;
+  if (message.startsWith('[FFmpeg info')) { newLine.style.color = 'goldenrod'; };
+  if (message.startsWith('[FFmpeg fferr')) { newLine.style.color = 'darkblue'; };
+  if (message.startsWith('[FFmpeg ffout')) { newLine.style.color = 'darkgreen'; }
+  consoleElement.appendChild(newLine);
   consoleElement.scrollTop = consoleElement.scrollHeight;
 });
