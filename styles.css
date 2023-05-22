@@ -66,4 +66,5 @@ button {
 #console div {
   white-space: pre-wrap;
   word-break: break-word;
+  justify-content: center;
 }

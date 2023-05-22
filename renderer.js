@@ -43,6 +43,13 @@ ipcRenderer.on('download:completed', (event, filePath) => {
   newLine.textContent = `File saved to: ${filePath}`;
   newLine.style.color = 'green';
   consoleElement.appendChild(newLine);
+
+  urlInput.value = '';
+  titleInput.value = '';
+  artistInput.value = '';
+  albumInput.value = '';
+  trackNumberInput.value = '';
+  albumArtInput.value = '';
 });
 
 ipcRenderer.on('download:error', (event, errorMessage, errorStack) => {

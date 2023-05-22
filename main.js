@@ -22,6 +22,13 @@ async function downloadThumbnailAndAudio(url, titleOverride, artistOverride, alb
 		event.reply('console', `[FFmpeg ${type}] ${message}`);
 	});
 
+	if (await ytdl.validateURL(url)) {
+		event.reply('console', 'URL validated');
+	} else {
+		event.reply('console', 'Invalid URL');
+		return;
+	}
+
 	const info = await ytdl.getInfo(url);
 	let videoTitle = titleOverride || info.videoDetails.title;
 	videoTitle = videoTitle.replace(/[^\[\]\(\)\- \w.-]+/g, '_');
@@ -105,14 +112,12 @@ async function downloadThumbnailAndAudio(url, titleOverride, artistOverride, alb
 		`file:${outputFilePath}`);
 
 	await fsp.writeFile(filePath, ffmpeg.FS('readFile', outputFilePath));
-
-	// Register the cleanup function
-	process.on('exit', cleanup);
-	process.on('SIGINT', cleanup);
-	process.on('SIGTERM', cleanup);
 }
 
 ipcMain.on('download', async (event, url, titleOverride, artistOverride, album, trackNumber) => {
+	const tempDir = path.join(__dirname, 'temp');
+	fs.mkdirSync(tempDir, { recursive: true });
+
 	try {
 		const result = await dialog.showSaveDialog({
 			defaultPath: `${titleOverride || 'song'}.mp3`,
@@ -145,6 +150,11 @@ const cleanup = () => {
 	// Remove the temporary directory
 	fs.rmSync(tempDir, { recursive: true });
 };
+
+// Register the cleanup function
+process.on('exit', cleanup);
+process.on('SIGINT', cleanup);
+process.on('SIGTERM', cleanup);
 
 function createWindow() {
 	const mainWindow = new BrowserWindow({
