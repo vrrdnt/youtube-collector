@@ -1,6 +1,6 @@
 {
   "name": "youtube-collector",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A CLI tool for downloading YouTube/SoundCloud audio and storing it for listening on Spotify. ",
   "main": "main.js",
   "scripts": {
