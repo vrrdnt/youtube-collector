@@ -1,3 +1,4 @@
 # youtube-collector
+
 ### TODO:
-fix the image cropping + metadata writing
+- remove temp thumbnail when done
