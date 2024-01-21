@@ -56,7 +56,7 @@
             // DescriptionLabel
             // 
             DescriptionLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            DescriptionLabel.Location = new Point(200, 24);
+            DescriptionLabel.Location = new Point(200, 9);
             DescriptionLabel.Name = "DescriptionLabel";
             DescriptionLabel.Size = new Size(270, 48);
             DescriptionLabel.TabIndex = 1;
@@ -65,7 +65,7 @@
             // 
             // URLTextBox
             // 
-            URLTextBox.Location = new Point(12, 26);
+            URLTextBox.Location = new Point(12, 11);
             URLTextBox.Margin = new Padding(3, 2, 3, 2);
             URLTextBox.Name = "URLTextBox";
             URLTextBox.PlaceholderText = "Enter YouTube URL *";
@@ -75,7 +75,7 @@
             // TitleTextBox
             // 
             TitleTextBox.AllowDrop = true;
-            TitleTextBox.Location = new Point(12, 53);
+            TitleTextBox.Location = new Point(12, 38);
             TitleTextBox.Margin = new Padding(3, 2, 3, 2);
             TitleTextBox.Name = "TitleTextBox";
             TitleTextBox.PlaceholderText = "Title *";
@@ -84,13 +84,13 @@
             // 
             // tableLayoutPanel1
             // 
-            tableLayoutPanel1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tableLayoutPanel1.Anchor = AnchorStyles.None;
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(DownloadButton, 0, 0);
             tableLayoutPanel1.Controls.Add(ClearButton, 0, 0);
-            tableLayoutPanel1.Location = new Point(200, 370);
+            tableLayoutPanel1.Location = new Point(200, 338);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -100,7 +100,7 @@
             // 
             // DownloadButton
             // 
-            DownloadButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            DownloadButton.Anchor = AnchorStyles.None;
             DownloadButton.Location = new Point(138, 3);
             DownloadButton.Name = "DownloadButton";
             DownloadButton.Size = new Size(129, 30);
@@ -110,7 +110,7 @@
             // 
             // ClearButton
             // 
-            ClearButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            ClearButton.Anchor = AnchorStyles.None;
             ClearButton.Location = new Point(3, 3);
             ClearButton.Name = "ClearButton";
             ClearButton.Size = new Size(129, 30);
@@ -121,7 +121,7 @@
             // ArtistTextBox
             // 
             ArtistTextBox.AllowDrop = true;
-            ArtistTextBox.Location = new Point(12, 80);
+            ArtistTextBox.Location = new Point(12, 65);
             ArtistTextBox.Margin = new Padding(3, 2, 3, 2);
             ArtistTextBox.Name = "ArtistTextBox";
             ArtistTextBox.PlaceholderText = "Artist";
@@ -131,7 +131,7 @@
             // AlbumTextBox
             // 
             AlbumTextBox.AllowDrop = true;
-            AlbumTextBox.Location = new Point(12, 107);
+            AlbumTextBox.Location = new Point(12, 92);
             AlbumTextBox.Margin = new Padding(3, 2, 3, 2);
             AlbumTextBox.Name = "AlbumTextBox";
             AlbumTextBox.PlaceholderText = "Album";
@@ -153,7 +153,7 @@
             // 
             // AlbumArtButton
             // 
-            AlbumArtButton.Location = new Point(12, 162);
+            AlbumArtButton.Location = new Point(12, 147);
             AlbumArtButton.Name = "AlbumArtButton";
             AlbumArtButton.Size = new Size(172, 23);
             AlbumArtButton.TabIndex = 9;
@@ -164,7 +164,7 @@
             // 
             RequiredLabel.AutoSize = true;
             RequiredLabel.ForeColor = SystemColors.ControlDark;
-            RequiredLabel.Location = new Point(114, 188);
+            RequiredLabel.Location = new Point(114, 173);
             RequiredLabel.Name = "RequiredLabel";
             RequiredLabel.Size = new Size(70, 15);
             RequiredLabel.TabIndex = 10;
@@ -174,9 +174,9 @@
             // 
             AlbumArtInfoLabel.Font = new Font("Segoe UI", 8F);
             AlbumArtInfoLabel.ForeColor = SystemColors.ControlDark;
-            AlbumArtInfoLabel.Location = new Point(12, 212);
+            AlbumArtInfoLabel.Location = new Point(12, 188);
             AlbumArtInfoLabel.Name = "AlbumArtInfoLabel";
-            AlbumArtInfoLabel.Size = new Size(172, 186);
+            AlbumArtInfoLabel.Size = new Size(172, 171);
             AlbumArtInfoLabel.TabIndex = 11;
             AlbumArtInfoLabel.Text = resources.GetString("AlbumArtInfoLabel.Text");
             // 
@@ -184,7 +184,7 @@
             // 
             LogLabel.AutoSize = true;
             LogLabel.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            LogLabel.Location = new Point(200, 67);
+            LogLabel.Location = new Point(200, 43);
             LogLabel.Name = "LogLabel";
             LogLabel.Size = new Size(35, 14);
             LogLabel.TabIndex = 12;
@@ -193,7 +193,7 @@
             // LogRichTextBox
             // 
             LogRichTextBox.Font = new Font("Consolas", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            LogRichTextBox.Location = new Point(200, 84);
+            LogRichTextBox.Location = new Point(200, 60);
             LogRichTextBox.Name = "LogRichTextBox";
             LogRichTextBox.Size = new Size(270, 272);
             LogRichTextBox.TabIndex = 13;
@@ -204,7 +204,7 @@
             githubLinkLabel.ActiveLinkColor = Color.White;
             githubLinkLabel.AutoSize = true;
             githubLinkLabel.LinkColor = Color.ForestGreen;
-            githubLinkLabel.Location = new Point(12, 388);
+            githubLinkLabel.Location = new Point(12, 359);
             githubLinkLabel.Name = "githubLinkLabel";
             githubLinkLabel.Size = new Size(99, 15);
             githubLinkLabel.TabIndex = 14;
@@ -215,7 +215,7 @@
             // 
             // TrackNumberUpDown
             // 
-            TrackNumberUpDown.Location = new Point(114, 135);
+            TrackNumberUpDown.Location = new Point(114, 120);
             TrackNumberUpDown.Name = "TrackNumberUpDown";
             TrackNumberUpDown.Size = new Size(70, 23);
             TrackNumberUpDown.TabIndex = 16;
@@ -225,7 +225,7 @@
             // 
             TrackNumberLabel.AutoSize = true;
             TrackNumberLabel.ForeColor = SystemColors.ControlDark;
-            TrackNumberLabel.Location = new Point(12, 137);
+            TrackNumberLabel.Location = new Point(12, 122);
             TrackNumberLabel.Name = "TrackNumberLabel";
             TrackNumberLabel.Size = new Size(79, 15);
             TrackNumberLabel.TabIndex = 17;
@@ -235,7 +235,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(481, 426);
+            ClientSize = new Size(481, 382);
             Controls.Add(TrackNumberLabel);
             Controls.Add(TrackNumberUpDown);
             Controls.Add(githubLinkLabel);

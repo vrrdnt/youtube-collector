@@ -3,6 +3,10 @@ using YoutubeExplode.Exceptions;
 using YoutubeExplode.Videos.Streams;
 using YoutubeExplode.Common;
 using TagLib;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using YoutubeExplode.Converter;
+using System.Reflection;
 
 namespace youtube_collector
 {
@@ -22,6 +26,9 @@ namespace youtube_collector
 
         private void AlbumArtButton_Click(object sender, EventArgs e)
         {
+
+            LogRichTextBox.AppendText("Awaiting user-provided album art\n");
+
             // Open OpenFileDialog to select album art from the user's computer
             if (OpenFileDialogAlbumArt.ShowDialog() == DialogResult.OK)
             {
@@ -30,11 +37,18 @@ namespace youtube_collector
 
                 // Update the logic to handle the selected album art file
                 HandleSelectedAlbumArt(selectedFilePath);
+
+                LogRichTextBox.AppendText($"Image selected: {selectedFilePath}\n");
             }
         }
         private async void DownloadButton_Click(object sender, EventArgs e)
         {
             var youtube = new YoutubeClient();
+
+            // Full path to ffmpeg.exe
+            string ffmpegPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "ffmpeg", "ffmpeg.exe");
+
+            LogRichTextBox.AppendText("Locating highest quality audio stream");
 
             try
             {
@@ -61,8 +75,11 @@ namespace youtube_collector
                     string newFileName = $"{title}.mp3";
                     string newPath = Path.Combine(Path.GetDirectoryName(destinationPath), newFileName);
 
-                    // Download and move the audio stream to the new file path
-                    await youtube.Videos.Streams.DownloadAsync(streamInfo, newPath);
+                    // Download the audio stream and wait for completion
+                    await youtube.Videos.DownloadAsync(videoUrl, newPath, o => o
+                        .SetContainer("mp3")
+                        .SetFFmpegPath(ffmpegPath)
+                    );
 
                     if (string.IsNullOrEmpty(albumArtFilePath))
                     {
@@ -71,9 +88,9 @@ namespace youtube_collector
 
                     LogRichTextBox.AppendText($"Downloaded and saved MP3 to: {newPath}\nAwaiting metadata\n");
 
+                    // Now that the download is complete, write metadata tags
                     WriteMetadataTags(newPath, albumArtFilePath);
                 }
-
             }
             catch (VideoUnplayableException ex)
             {
@@ -92,30 +109,32 @@ namespace youtube_collector
                 var file = TagLib.File.Create(filePath);
 
                 // Clear existing tags
-                file.RemoveTags(TagTypes.Id3v2);
+                file.RemoveTags(TagTypes.AllTags);
 
-                // Write metadata tags
-                file.Tag.Title = TitleTextBox.Text;
-                file.Tag.Performers = new[] { ArtistTextBox.Text };
-                file.Tag.Album = AlbumTextBox.Text;
-                file.Tag.Track = (uint)TrackNumberUpDown.Value;
+                file.Save();
+                file.Dispose();
 
+                file = TagLib.File.Create(filePath);
+
+                // Create an ID3v2 tag
+                var newTag = (TagLib.Id3v2.Tag)file.GetTag(TagTypes.Id3v2, true);
+
+                // Set metadata tags
+                newTag.Title = TitleTextBox.Text;
+                newTag.Performers = new[] { ArtistTextBox.Text };
+                newTag.Album = AlbumTextBox.Text;
+                newTag.Track = (uint)TrackNumberUpDown.Value;
 
                 // Embed album art
                 if (!string.IsNullOrEmpty(albumArtPath))
                 {
                     var picture = new Picture(albumArtPath);
-                    file.Tag.Pictures = new IPicture[] { picture };
+                    newTag.Pictures = new IPicture[] { picture };
                 }
-
-                // LogRichTextBox.AppendText($"Title: {file.Tag.Title}\n");
-                // LogRichTextBox.AppendText($"Artist: {file.Tag.Performers}\n");
-                // LogRichTextBox.AppendText($"Album: {file.Tag.Album}\n");
-                // LogRichTextBox.AppendText($"Track #: {file.Tag.Track}\n");
-                // LogRichTextBox.AppendText($"Album art: ${file.Tag.Pictures[0]}");
 
                 // Save changes
                 file.Save();
+                file.Dispose();
 
                 LogRichTextBox.AppendText("All metadata written to file\n");
             }
@@ -125,7 +144,7 @@ namespace youtube_collector
             }
         }
 
-        private async Task<string> DownloadThumbnailAsync(string videoUrl)
+        private async Task<string?> DownloadThumbnailAsync(string videoUrl)
         {
             var youtube = new YoutubeClient();
 
@@ -133,6 +152,7 @@ namespace youtube_collector
             {
                 var video = await youtube.Videos.GetAsync(videoUrl);
                 var thumbnail = video.Thumbnails.TryGetWithHighestResolution();
+                LogRichTextBox.AppendText($"Thumbnail found: {thumbnail}\n");
 
                 if (thumbnail != null)
                 {
@@ -145,9 +165,7 @@ namespace youtube_collector
                     }
 
                     // Store the downloaded album art file path
-                    HandleSelectedAlbumArt(thumbnailPath);
-
-                    return thumbnailPath;
+                    return HandleSelectedAlbumArt(thumbnailPath);
                 }
                 else
                 {
@@ -162,46 +180,45 @@ namespace youtube_collector
             }
         }
 
-        private void HandleSelectedAlbumArt(string selectedFilePath)
+        private string HandleSelectedAlbumArt(string selectedFilePath)
         {
             // Store the selected album art file path
             albumArtFilePath = selectedFilePath;
 
             // Implement cropping logic to make the image square
             CropAlbumArt(selectedFilePath);
+
+            return albumArtFilePath;
         }
 
         private void CropAlbumArt(string imagePath)
         {
+            string croppedImagePath = "";
             try
             {
-                // Load the image
-                using (var originalImage = Image.FromFile(imagePath))
+                using (var originalImage = SixLabors.ImageSharp.Image.Load(imagePath))
                 {
                     // Determine the size of the square
                     int size = Math.Min(originalImage.Width, originalImage.Height);
 
-                    // Create a rectangle for the square
-                    var squareRectangle = new Rectangle(0, 0, size, size);
+                    // Calculate the coordinates for cropping centered on the actual center of the image
+                    int x = (originalImage.Width - size) / 2;
+                    int y = (originalImage.Height - size) / 2;
 
-                    // Create a new bitmap with the square size
-                    using (var croppedImage = new Bitmap(size, size))
-                    {
-                        // Create a graphics object to draw the cropped image
-                        using (var graphics = Graphics.FromImage(croppedImage))
-                        {
-                            // Crop the original image to the square size
-                            graphics.DrawImage(originalImage, squareRectangle, squareRectangle, GraphicsUnit.Pixel);
-                        }
+                    // Crop the image using ImageSharp
+                    var croppedImage = originalImage.Clone(ctx => ctx.Crop(new SixLabors.ImageSharp.Rectangle(x, y, size, size)));
 
-                        // Save the cropped image back to the original file
-                        croppedImage.Save(imagePath, originalImage.RawFormat);
-                    }
+                    // Save the cropped image to a new file
+                    croppedImagePath = Path.Combine(Path.GetTempPath(), "cropped_thumbnail.jpg");
+                    croppedImage.Save(croppedImagePath);
                 }
+
+                // Replace the original file with the cropped one
+                System.IO.File.Copy(croppedImagePath, imagePath, true);
             }
             catch (Exception ex)
             {
-                LogRichTextBox.AppendText($"Error cropping album art: {ex.Message}\n");
+                LogRichTextBox.AppendText($"Error cropping album art: {ex.StackTrace}\n");
             }
         }
 
