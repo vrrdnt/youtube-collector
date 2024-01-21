@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("youtube-collector")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9172570c7dc442770bfc40d993b1cb663e92c094")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+48e22a9750a856e772522675d8da3b1c0cb28abc")]
 [assembly: System.Reflection.AssemblyProductAttribute("youtube-collector")]
 [assembly: System.Reflection.AssemblyTitleAttribute("youtube-collector")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
