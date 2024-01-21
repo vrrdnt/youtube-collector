@@ -90,6 +90,9 @@ namespace youtube_collector
 
                     // Now that the download is complete, write metadata tags
                     WriteMetadataTags(newPath, albumArtFilePath);
+
+                    System.IO.File.Delete(albumArtFilePath);
+                    albumArtFilePath = "";
                 }
             }
             catch (VideoUnplayableException ex)
@@ -135,8 +138,6 @@ namespace youtube_collector
                 // Save changes
                 file.Save();
                 file.Dispose();
-
-                System.IO.File.Delete(albumArtPath);
 
                 LogRichTextBox.AppendText("All metadata written to file\n");
             }
