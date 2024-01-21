@@ -1,4 +1,4 @@
 # youtube-collector
 
-###TODO:
+### TODO:
 - remove temp thumbnail when done
