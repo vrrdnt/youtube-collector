@@ -136,6 +136,8 @@ namespace youtube_collector
                 file.Save();
                 file.Dispose();
 
+                System.IO.File.Delete(albumArtPath);
+
                 LogRichTextBox.AppendText("All metadata written to file\n");
             }
             catch (Exception ex)
