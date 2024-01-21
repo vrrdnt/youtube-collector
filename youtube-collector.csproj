@@ -9,7 +9,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
       <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
     <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
+    <ApplicationIcon>Note_Block_JE2_BE2.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Note_Block_JE2_BE2.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="TagLibSharp" Version="2.3.0" />
