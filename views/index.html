@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" href="/Grass_Block.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="/Grass_Block.ico" type="image/x-icon"/>
     <title>YouTube to MP3 Converter</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <div class="container">
-        <h1>YouTube to MP3 Converter</h1>
+        <h1><a href="https://github.com/vrrdnt/youtube-collector/tree/node-server-webpage">youtube-collector</a></h1>
         <form id="conversionForm" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="videoUrl">YouTube Video URL:</label>
@@ -31,7 +33,7 @@
                 <input type="text" id="trackNumber" name="trackNumber" required>
             </div>
             <div class="form-group">
-                <label for="image">Album Art (optional):</label>
+                <label for="image">Album Art (optional -- page may lag while uploading!):</label>
                 <input type="file" id="image" name="image">
             </div>
             <button type="submit">Convert to MP3</button>
