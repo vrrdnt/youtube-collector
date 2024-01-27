@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube to MP3 Converter</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube to MP3 Converter</h1>
+        <form id="conversionForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="videoUrl">YouTube Video URL:</label>
+                <input type="text" id="videoUrl" name="videoUrl" required>
+            </div>
+            <div class="form-group">
+                <label for="artist">Artist:</label>
+                <input type="text" id="artist" name="artist" required>
+            </div>
+            <div class="form-group">
+                <label for="songName">Song Name:</label>
+                <input type="text" id="songName" name="songName" required>
+            </div>
+            <div class="form-group">
+                <label for="album">Album:</label>
+                <input type="text" id="album" name="album" required>
+            </div>
+            <div class="form-group">
+                <label for="trackNumber">Track Number:</label>
+                <input type="text" id="trackNumber" name="trackNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="image">Album Art (optional):</label>
+                <input type="file" id="image" name="image">
+            </div>
+            <button type="submit">Convert to MP3</button>
+        </form>
+        <div id="result"></div>
+        <div id="downloadLink"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/dropzone-min.js"></script>
+    <script src="js/cropper.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
