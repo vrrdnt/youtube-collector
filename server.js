@@ -103,15 +103,15 @@ const convertToMP3 = async (videoUrl, imageBuffer, artist, songName, album, trac
                 .audioBitrate(192)
                 .input(imageFilePath) // Input the image buffer directly
                 .inputFormat('image2pipe')
-                .outputOptions([
-                    '-map 0',
-                    '-map 1', // Map the image input
-                    `-metadata title=${metadataTags.title}`,
-                    `-metadata artist=${metadataTags.artist}`,
-                    `-metadata album=${metadataTags.album}`,
-                    `-metadata track=${metadataTags.track}`,
-                    `-metadata comment=${metadataTags.comment}`,
-                ])
+                .outputOptions(
+                    '-map', '0',
+                    '-map', '1', // Map the image input
+                    '-metadata', `title=${metadataTags.title}`,
+                    '-metadata', `artist=${metadataTags.artist}`,
+                    '-metadata', `album=${metadataTags.album}`,
+                    '-metadata', `track=${metadataTags.track}`,
+                    '-metadata', `comment=${metadataTags.comment}`,
+                )
                 .output(mp3FilePath)
                 .on('end', () => {
                     // Remove temporary video file
