@@ -50,7 +50,7 @@ const cropImage = async (imageBuffer) => {
     try {
         // Resize and crop the image to a square with a size of 300x300 pixels
         const croppedBuffer = await sharp(imageBuffer)
-            .resize(300, 300, { fit: 'cover' })
+            .resize(500, 500, { fit: 'cover' })
             .toBuffer();
 
         return croppedBuffer;
@@ -84,7 +84,7 @@ const convertToMP3 = async (videoUrl, imageBuffer, artist, songName, album, trac
             videoWriteStream.on('error', reject);
         });
 
-        // Save the image to a temporary file
+        // Save the user-provided image to a temporary file
         fs.writeFileSync(imageFilePath, imageBuffer);
 
         // Set metadata tags for the MP3 file
@@ -101,7 +101,7 @@ const convertToMP3 = async (videoUrl, imageBuffer, artist, songName, album, trac
             ffmpeg(videoFilePath)
                 .audioCodec('libmp3lame')
                 .audioBitrate(192)
-                .input(imageFilePath) // Input the image buffer directly
+                .input(imageFilePath) // Input the user-provided image
                 .inputFormat('image2pipe')
                 .outputOptions(
                     '-map', '0',
@@ -123,6 +123,15 @@ const convertToMP3 = async (videoUrl, imageBuffer, artist, songName, album, trac
         });
 
         console.log('Conversion to MP3 completed');
+
+        // Remove temporary files starting with "temp_"
+        fs.readdirSync(downloadsFolder)
+        .filter(file => file.startsWith('temp_'))
+        .forEach(file => {
+            const filePath = path.join(downloadsFolder, file);
+            fs.unlinkSync(filePath);
+        });
+        
         return { videoFilePath, mp3FileName, downloadsFolder };
     } catch (error) {
         console.error('Error converting to MP3:', error.message);
@@ -140,6 +149,29 @@ const convertToMP3 = async (videoUrl, imageBuffer, artist, songName, album, trac
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
+
+// Route to serve the file browser page
+app.get('/file-browser', (req, res) => {
+    // Get the list of files in the /downloads/ directory
+    const downloadsFolder = path.join(__dirname, 'downloads');
+    fs.readdir(downloadsFolder, (err, files) => {
+        if (err) {
+            console.error('Error reading downloads folder:', err.message);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        // Filter out files starting with "temp_" (temporary files)
+        const filteredFiles = files.filter((file) => !file.startsWith('temp'));
+        
+        // Render the file browser page with the list of files
+        res.render('file-browser', { files: filteredFiles });
+    });
+});
+
+// Set up the views directory for rendering templates
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 app.post('/convert', upload.single('image'), async (req, res) => {
     try {
@@ -168,7 +200,7 @@ app.post('/convert', upload.single('image'), async (req, res) => {
         const trackNumber = req.body.trackNumber || '1';
 
         // Convert video to MP3
-        const { mp3FilePath, mp3FileName, downloadsFolder } = await convertToMP3(videoUrl, croppedImageBuffer, artist, songName, album, trackNumber);
+        const { mp3FileName } = await convertToMP3(videoUrl, croppedImageBuffer, artist, songName, album, trackNumber);
 
         // Set the Content-Disposition header manually
         res.setHeader('Content-Disposition', `attachment; filename="${mp3FileName}"`);

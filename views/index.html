@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" href="/Grass_Block.ico" type="image/x-icon"/>
-    <link rel="shortcut icon" href="/Grass_Block.ico" type="image/x-icon"/>
+    <link rel="icon" href="/Grass_Block.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/Grass_Block.ico" type="image/x-icon" />
     <title>YouTube to MP3 Converter</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
     <div class="container">
         <h1><a href="https://github.com/vrrdnt/youtube-collector/tree/node-server-webpage">youtube-collector</a></h1>
@@ -36,14 +38,33 @@
                 <label for="image">Album Art (optional -- page may lag while uploading!):</label>
                 <input type="file" id="image" name="image">
             </div>
-            <button type="submit">Convert to MP3</button>
+            <div class="button-container">
+                <button id="clearButton" type="button" onclick="clearForm()">Clear</button>
+                <button id ="fileBrowserButton" onclick="window.location.href='/file-browser'">Downloaded Songs</button>
+                <button id="conversionButton" type="submit">Convert to MP3</button>
+            </div>
         </form>
         <div id="result"></div>
-        <div id="downloadLink"></div>
+        <div class="button-container" id="downloadLink"></div>
     </div>
+    <script>
+        // Add this JavaScript function for clearing the form
+        function clearForm() {
+            document.getElementById('videoUrl').value = '';
+            document.getElementById('artist').value = '';
+            document.getElementById('songName').value = '';
+            document.getElementById('album').value = '';
+            document.getElementById('trackNumber').value = '';
+            document.getElementById('image').value = '';
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('downloadLink').innerHTML = '';
+        }
+    </script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/dropzone-min.js"></script>
     <script src="js/cropper.min.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>

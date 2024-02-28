@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Browser</title>
+    <style>
+        h1 {
+            color: #ffffff;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #121212;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a,a:visited,a:hover {
+            color: #1db954;
+        }
+    </style>
+</head>
+<body>
+    <h1>File Browser</h1>
+    <ul>
+        <% files.forEach(file => { %>
+            <li><a href="/downloads/<%= file %>"><%= file %></a></li>
+        <% }); %>
+    </ul>
+</body>
+</html>

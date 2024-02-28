@@ -4,6 +4,10 @@ body {
     color: #fff;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
 }
 
 .container {
@@ -54,15 +58,10 @@ input[type="file"] {
 
 button {
     padding: 10px;
-    background-color: #1db954;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
 }
 
 #result {
@@ -70,16 +69,48 @@ button:hover {
     text-align: center;
 }
 
-#downloadLink a {
-    display: inline-block;
-    padding: 10px;
+button#downloadLink {
+    margin-top: 5%;
     background-color: #1db954;
-    color: #fff;
-    text-decoration: none;
     text-align: center;
-    border-radius: 4px;
 }
 
-#downloadLink a:hover {
+button#downloadLink:hover {
     background-color: #45a049;
+}
+
+button#downloadLink a,button#downloadLink a:visited,button#downloadLink a:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Style for the button */
+#fileBrowserButton {
+    background-color: #1d73b9;
+}
+
+#fileBrowserButton:hover {
+    background-color: #3470a1;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between; /* or space-between */
+    margin-top: -10px;
+}
+
+#conversionButton:hover {
+    background-color: #45a049;
+}
+
+#conversionButton {
+    background-color: #1db954;
+}
+
+#clearButton {
+    background-color: #b91d1d;
+}
+
+#clearButton:hover {
+    background-color: #a13a3a;
 }

@@ -77,8 +77,8 @@ jQuery(function ($) {
                 const downloadLink = `/downloads/${encodeURIComponent(data.mp3FileName)}`;
 
                 // Update the download link with the correct file name
-                $('#result').html('Conversion completed!').show();
-                $('#downloadLink').html(`<a href="${downloadLink}" download style="text-align: center;">Download MP3</a>`).show();
+                $('#result').html('Conversion completed!').hide();
+                $('#downloadLink').html(`<button id="downloadLink"><a href="${downloadLink}" download">Download MP3</a></button>`).show();
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
