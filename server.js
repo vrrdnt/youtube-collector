@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const ytdl = require('ytdl-core');
 const ffmpeg = require('fluent-ffmpeg');
+const pathToFfmpeg = require('ffmpeg-static')
 const fs = require('fs');
 const axios = require('axios');
 const sharp = require('sharp');
@@ -112,6 +113,7 @@ const convertToMP3 = async (videoUrl, imageBuffer, artist, songName, album, trac
                     '-metadata', `track=${metadataTags.track}`,
                     '-metadata', `comment=${metadataTags.comment}`,
                 )
+                .setFfmpegPath(pathToFfmpeg)
                 .output(mp3FilePath)
                 .on('end', () => {
                     // Remove temporary video file
